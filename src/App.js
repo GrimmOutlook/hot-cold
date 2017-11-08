@@ -1,20 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';  //, { Component } from 'react';
+
+import What from './components/what';
+import NewGame from './components/new-game';
+import Indicator from './components/indicator';
+import GuessForm from './components/guess-form';
+import GuessNumber from './components/guess-number';
+import GuessesTracker from './components/guesses-tracker';
 import './App.css';
 
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          <div>React version: {React.version}</div>
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+    <div className="div-for-everything-so-i-dont-get-an-error">
+      <header>
+        <nav>
+          <What />
+          <NewGame />
+        </nav>
+      </header>
+      <div className="main-container">
+        <h1>Hot or Cold</h1>
+        <div className="indicator">
+          <Indicator />
+        </div>
+        <div className="guess-form">
+          <GuessForm />
+        </div>
+        <div className="guess-number">
+          <GuessNumber />
+        </div>
+        <div className="guess-tracker">
+          <GuessesTracker />
+        </div>
       </div>
+    </div>
     );
   }
 }
