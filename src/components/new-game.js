@@ -3,10 +3,10 @@ import React from 'react';
 
 
 
-export default function NewGame() {
+export default function NewGame(props) {
   return (
     <div className="new-game">
-      New Game
+      <button onClick={props.refresh}>New Game</button>
     </div>
   )
 }
