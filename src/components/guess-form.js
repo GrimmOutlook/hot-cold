@@ -6,15 +6,21 @@ import React from 'react';
 //  Use Search exercise form component?
 
 export default function GuessForm(props) {
+    let error = '';
 
-    if(!props.errorMessage===''){
-      return(<h3>${props.errorMessage}</h3>)
+    if(!(props.errorMessage==='')){
+      error = <h3>{props.errorMessage}</h3>
     }
 
     return(
-      <form>
-        <input type="text" name="userGuess" id="userGuess" maxLength="3" placeholder="Enter your Guess" required/>
-        <input type="submit" id="guessButton" className="button" name="submit" value="Guess"/>
-      </form>
+      <div>
+        {error}
+
+        <form onSubmit={e => {e.preventDefault(); props.submitProp()}}>
+          <input type="text" name="userGuess" id="userGuess" maxLength="3" placeholder="Enter your Guess" value={props.currentGuess} onChange={e => props.userInput(e.target.value)} required/>
+
+          <input type="submit" id="guessButton" className="button" name="submit" value="Guess" />
+        </form>
+      </div>
     )
 }

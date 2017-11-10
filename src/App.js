@@ -16,7 +16,7 @@ class App extends React.Component {
       whatButton: true,
       newGameButton: true,
       indicatorText: "Make Your Guess!",
-      guessFormValue: null,
+      guessFormValue: '',
       errorMessage: '',
       guessTotal: 0,
       guessTrackerArray: [],
@@ -36,25 +36,22 @@ class App extends React.Component {
     // onClick in new-game component, toggle boolean value AND reset all this state values to defaults
       whatButton: true,
       newGameButton: true,
-      indicatorText: "Make Your Guess! Testing!!!!!!!!!!",
-      guessFormValue: null,
+      indicatorText: "Make Your Guess!",
+      guessFormValue: '',
       guessTotal: 0,
       guessTrackerArray: [],
       answerValue: Math.floor(Math.random()*(101-0))
     });
   }
 
-  changeIndicator(){
-    this.setState({
-
-    // when button in guess-form component is clicked, compare value entered in form field (which is this.state.guessFormValue) to this.state.answerValue:
-      // if equal, game is over.  setState of all this.state items to appropriate values.
-      // if within 10, change this.state.indicatorText to "Hot" & update guessTrackerArray
-      // if difference > 10, change this.state.indicatorText to "Cold" & update guessTrackerArray
-    });
+  setStuff(value){
+      this.setState({
+        guessFormValue: value
+      })
   }
 
-  captureFormValue(){
+  captureFormValue(value){
+      this.setState({errorMessage: ''})
 
       if (this.state.guessFormValue < 0 || this.state.guessFormValue > 100 || isNaN(this.state.guessFormValue)){
         this.setState({errorMessage: "Guess must be a number between 0 and 100."})
@@ -62,50 +59,32 @@ class App extends React.Component {
       else if (this.state.guessTrackerArray.includes(this.state.guessFormValue)){
         this.setState({errorMessage: "You guessed this number already."})
       }
-      else if (this.state.guessFormValue === this.state.answerValue){
+      else if (+this.state.guessFormValue === +this.state.answerValue){
         this.setState({
           indicatorText: "You Won!",
-          guessFormValue: null
+          guessFormValue: ''
         })
       }
       else if (Math.abs(this.state.guessFormValue - this.state.answerValue) <= 10){
+        const newArray = [...this.state.guessTrackerArray, this.state.guessFormValue]
         this.setState({
           indicatorText: "Hot",
           guessTotal: this.state.guessTotal + 1,
-          guessTrackerArray: this.state.guessTrackerArray.push(this.state.guessFormValue)
+          guessTrackerArray: newArray,
+          guessFormValue: ''
         })
       }
       else {
+        const newArray = [...this.state.guessTrackerArray, this.state.guessFormValue]
         this.setState({
           indicatorText: "Cold",
           guessTotal: this.state.guessTotal + 1,
-          guessTrackerArray: this.state.guessTrackerArray.push(this.state.guessFormValue)
+          guessTrackerArray: newArray,
+          guessFormValue: ''
         })
       }
-      // get the value from the form:
-        // if value is > 100 or < 0, trigger error modal popup (a separate component w/error prop?)
-        // if value is contained within this.state.guessTrackerArray, trigger error modal popup (a separate component w/error prop?)
-        // if value is NaN, trigger error modal popup (a separate component w/error prop?)
-        // if value is equal, within 10, or more than 10 away - repeat of the changeIndicator fxn?
 
   }
-
-  changeGuessTotal(){
-    this.setState({
-      // whenever button is clicked & form value is valid, increment this.state.guessTotal by 1
-    })
-  }
-
-  changeTrackerArray(){
-    this.setState({
-      // push value from this.state.guessFormValue into this.state.guessTrackerArray
-    })
-  }
-
-
-
-
-
 
   render() {
     return (
@@ -122,7 +101,7 @@ class App extends React.Component {
           <Indicator changeIndicator={this.state.indicatorText}/>
         </div>
         <div className="guess-form">
-          <GuessForm errorMessage={this.state.errorMessage}/>
+          <GuessForm errorMessage={this.state.errorMessage} userInput={(value) => this.setStuff(value)} submitProp={() => this.captureFormValue()} currentGuess={this.state.guessFormValue}/>
         </div>
         <div className="guess-number">
           <GuessNumber total={this.state.guessTotal}/>
